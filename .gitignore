@@ -1,0 +1,18 @@
+# Ignorar ambiente virtual (pesado e inútil para o Git)
+venv/
+.env
+
+# Ignorar arquivos de dados (para não deixar o Git lento)
+data/bronze/*.csv
+data/silver/*.parquet
+data/silver/*.csv
+data/gold/*.parquet
+data/gold/*.csv
+
+# Ignorar arquivos de sistema/cache do Python
+__pycache__/
+*.pyc
+
+# Ignorar logs do Airflow local (se tiver)
+logs/
+plugins/
