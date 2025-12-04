@@ -1,23 +1,37 @@
-graph TD
-    %% Estilos para ficar Preto e Branco
-    classDef bw fill:#ffffff,stroke:#000000,stroke-width:2px,color:#000000;
-
-    subgraph ORQUESTRACAO [ORQUESTRADOR: AIRFLOW]
-        direction TB
-        T1(Task 1: Ingestão)
-        T2(Task 2: Tratamento Silver)
-        T3(Task 3: KPIs Gold)
-    end
-
-    SOURCE[FONTE: CSV Kaggle] -->|extract.py| BRONZE[BRONZE: Raw Data]
-    BRONZE -->|transform_silver.py / Pandas| SILVER[SILVER: Dados Limpos]
-    SILVER -->|transform_gold.py / DuckDB| GOLD[GOLD: KPIs de Negócio]
-
-    %% Aplicando estilo preto e branco
-    class SOURCE,BRONZE,SILVER,GOLD bw;
-    class T1,T2,T3 bw;
-    
-    %% Conexão lógica
-    T1 -.-> BRONZE
-    T2 -.-> SILVER
-    T3 -.-> GOLD
++-----------------------------------------------------------------------+
+|                       ORQUESTRADOR: APACHE AIRFLOW                    |
+|                  (DAG: dags/elt_pipeline.py - @daily)                 |
++-----------------------------------------------------------------------+
+        |
+        | (Task 1: extract_to_bronze)
+        v
++------------------+            +------------------+
+|  FONTE KAGGLE    |            |   CAMADA BRONZE  |
+| rideshare.csv    | ---------> |   data/bronze/   |
++------------------+            | (Arquivo Bruto)  |
+                                +------------------+
+                                         |
+                                         | (Task 2: bronze_to_silver)
+                                         | Script: src/transform_silver.py
+                                         | Tecnol: Python + Pandas (UTF-8 Fix)
+                                         v
+                                +------------------+
+                                |   CAMADA SILVER  |
+                                |    data/silver/  |
+                                | (Dados Limpos)   |
+                                +------------------+
+                                         |
+                                         | (Task 3: silver_to_gold)
+                                         | Script: src/transform_gold.py
+                                         | Tecnol: Python + DuckDB (SQL)
+                                         v
+                                +------------------+
+                                |    CAMADA GOLD   |
+                                |     data/gold/   |
+                                | (KPIs de Negócio)|
+                                +------------------+
+                                         |
+                                         | (Validação Final)
+                                         | Script: src/analise_final.py
+                                         v
+                               [ RELATÓRIO FINAL ]
