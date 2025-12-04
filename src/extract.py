@@ -14,7 +14,7 @@ def extract_to_bronze():
         print(f"SUCESSO: Arquivo encontrado em: {file_path}")
         print("A ingestão manual foi confirmada.")
     else:
-        # Se não achar, dá erro e para tudo (o Airflow vai ficar vermelho)
+        # Se não achar(o Airflow vai ficar vermelho)
         raise FileNotFoundError(f"ERRO: O arquivo não está em {file_path}. Verifique se você renomeou e moveu corretamente!")
 
 if __name__ == "__main__":

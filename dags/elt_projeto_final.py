@@ -1,17 +1,16 @@
-from airflow import DAG
-from airflow.operators.python import PythonOperator
+from airflow import DAG #Pra criaar o pipeline e rodar as tarefas em py
+from airflow.operators.python import PythonOperator 
 from datetime import datetime, timedelta
-import sys
+import sys #garantir que o Airflow encontre a pasta src e importe os scripts
 import os
 
-# --- IMPORTANTE: Garante que o Airflow encontre a pasta 'src' ---
+# Garante que o Airflow encontre a pasta 'src' 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-# --- CORREÇÃO DOS IMPORTS (O ERRO ESTAVA AQUI) ---
-# O Python precisa saber: "Da pasta SRC, arquivo TAL, importe a FUNÇÃO"
+#Importei as 3 funcoes
 from src.extract import extract_to_bronze
-from src.transform_silver import bronze_to_silver  # Nome do arquivo real: transform_silver.py
-from src.transform_gold import silver_to_gold      # Nome do arquivo real: transform_gold.py
+from src.transform_silver import bronze_to_silver  
+from src.transform_gold import silver_to_gold      
 
 default_args = {
     'owner': 'roberta_data_engineer',
@@ -46,5 +45,5 @@ with DAG(
         python_callable=silver_to_gold
     )
 
-    # Dependências
+    
     t1 >> t2 >> t3

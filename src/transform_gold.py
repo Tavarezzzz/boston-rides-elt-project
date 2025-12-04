@@ -2,14 +2,14 @@ import duckdb
 import os
 
 def silver_to_gold():
-    # 1. Configura os caminhos
+    #Configura os caminhos
     base_path = os.getcwd()
     
-    # MUDANÇA: Lê .csv da Silver
+    #Lê o .csv da Silver
     raw_input_file = os.path.join(base_path, "data", "silver", "rides_clean.csv")
     raw_output_dir = os.path.join(base_path, "data", "gold")
     
-    # Correção de caminhos para Windows
+    # Correção de caminhos para Windows garantindo que o caminho funcione mesmo com barras invertidas (\) do Windows.
     input_file = raw_input_file.replace('\\', '/')
     output_dir = raw_output_dir.replace('\\', '/')
     
@@ -18,13 +18,11 @@ def silver_to_gold():
     print("--- INICIANDO CAMADA GOLD (Saída em CSV) ---")
     print(f"Lendo dados da Silver: {input_file}")
 
-    # ---------------------------------------------------------
-    # KPI 1: Preço Médio por Km
-    # ---------------------------------------------------------
-    # MUDANÇA: Extensão .csv
+    # KPI 1: Preço Médio por Km (calculado usando DuckDB)
+    
     file_kpi1 = f"{output_dir}/kpi_preco_km.csv"
     
-    # MUDANÇA: read_csv no input e FORMAT CSV no output
+    # O DuckDB vai ler CSV e salvar CSV
     query_kpi1 = f"""
         COPY (
             SELECT 
@@ -37,9 +35,9 @@ def silver_to_gold():
         ) TO '{file_kpi1}' (HEADER, DELIMITER ',');
     """
     
-    # ---------------------------------------------------------
+    
     # KPI 2: Top 10 Rotas Mais Caras
-    # ---------------------------------------------------------
+    
     file_kpi2 = f"{output_dir}/kpi_rotas_caras.csv"
     query_kpi2 = f"""
         COPY (
@@ -55,9 +53,8 @@ def silver_to_gold():
         ) TO '{file_kpi2}' (HEADER, DELIMITER ',');
     """
 
-    # ---------------------------------------------------------
     # KPI 3: Impacto da Tarifa Dinâmica
-    # ---------------------------------------------------------
+    
     file_kpi3 = f"{output_dir}/kpi_surge_impact.csv"
     query_kpi3 = f"""
         COPY (

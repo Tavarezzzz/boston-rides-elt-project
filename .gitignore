@@ -6,8 +6,6 @@ venv/
 data/bronze/*.csv
 data/silver/*.parquet
 data/silver/*.csv
-data/gold/*.parquet
-data/gold/*.csv
 
 # Ignorar arquivos de sistema/cache do Python
 __pycache__/

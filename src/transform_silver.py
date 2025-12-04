@@ -7,7 +7,7 @@ def bronze_to_silver():
     input_file = os.path.join(base_path, "data", "bronze", "rideshare_kaggle.csv")
     output_dir = os.path.join(base_path, "data", "silver")
     
-    # MUDANÇA: Extensão agora é .csv
+    # Extensão mudada pra .csv
     output_file = os.path.join(output_dir, "rides_clean.csv")
     
     os.makedirs(output_dir, exist_ok=True)
@@ -15,7 +15,7 @@ def bronze_to_silver():
     print("--- INICIANDO CAMADA SILVER (Saída em CSV) ---")
     print(f"Lendo arquivo: {input_file}")
 
-    # 2. Leitura Inteligente (Mantendo a proteção contra erro de encoding)
+    #Leitura
     df = None
     encodings_to_try = ['utf-8', 'utf-16', 'latin-1', 'cp1252']
     
@@ -36,20 +36,19 @@ def bronze_to_silver():
         # 3. Transformações
         initial_count = len(df)
         
-        # Filtra nulos na coluna price
+        # Filtrei os nulos na coluna price
         df = df[df['price'].notna()]
         final_count = len(df)
         
-        # Converte timestamp (ms) para datetime
+        # Converti timestamp para datetime
         if 'time_stamp' in df.columns:
             df['datetime_clean'] = pd.to_datetime(df['time_stamp'], unit='ms')
         
         print(f"Linhas lidas: {initial_count}")
         print(f"Linhas após limpeza: {final_count}")
 
-        # 4. Salva em CSV (MUDANÇA AQUI)
-        # index=False remove aquela coluna de números 0,1,2... da esquerda
-        df.to_csv(output_file, index=False)
+        # 4. Salvei em CSV 
+        df.to_csv(output_file, index=False) # index=False para remover a col de números 0,1,2... da esquerda
         print(f"SUCESSO! Arquivo salvo em: {output_file}")
         
     except Exception as e:
