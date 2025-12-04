@@ -1,37 +1,22 @@
-+-----------------------------------------------------------------------+
-|                       ORQUESTRADOR: APACHE AIRFLOW                    |
-|                  (DAG: dags/elt_pipeline.py - @daily)                 |
-+-----------------------------------------------------------------------+
-        |
-        | (Task 1: extract_to_bronze)
-        v
-+------------------+            +------------------+
-|  FONTE KAGGLE    |            |   CAMADA BRONZE  |
-| rideshare.csv    | ---------> |   data/bronze/   |
-+------------------+            | (Arquivo Bruto)  |
-                                +------------------+
-                                         |
-                                         | (Task 2: bronze_to_silver)
-                                         | Script: src/transform_silver.py
-                                         | Tecnol: Python + Pandas (UTF-8 Fix)
-                                         v
-                                +------------------+
-                                |   CAMADA SILVER  |
-                                |    data/silver/  |
-                                | (Dados Limpos)   |
-                                +------------------+
-                                         |
-                                         | (Task 3: silver_to_gold)
-                                         | Script: src/transform_gold.py
-                                         | Tecnol: Python + DuckDB (SQL)
-                                         v
-                                +------------------+
-                                |    CAMADA GOLD   |
-                                |     data/gold/   |
-                                | (KPIs de Negócio)|
-                                +------------------+
-                                         |
-                                         | (Validação Final)
-                                         | Script: src/analise_final.py
-                                         v
-                               [ RELATÓRIO FINAL ]
+ORQUESTRADOR: Apache Airflow (DAG @daily)
+      |
+      | (Executa task: extract_to_bronze)
+      v
+1. FONTE DE DADOS
+   Arquivo: rideshare_kaggle.csv
+      |
+      v
+2. CAMADA BRONZE (Data Lake Raw)
+   Status: Dado Bruto (Ingestão)
+      |
+      | (Executa task: transform_to_silver)
+      | (Tecnologia: Python + Pandas)
+      v
+3. CAMADA SILVER (Data Lake Clean)
+   Status: Dado Limpo e Padronizado
+      |
+      | (Executa task: calculate_kpis_gold)
+      | (Tecnologia: Python + DuckDB)
+      v
+4. CAMADA GOLD (Data Mart)
+   Status: KPIs de Negócio e Agregações
