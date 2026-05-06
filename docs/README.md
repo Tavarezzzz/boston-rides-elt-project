@@ -28,8 +28,13 @@ The goal of this project is to analyze ride-sharing data in Boston to answer key
 1. Install the required dependencies:
    ```bash
    pip install -r requirements.txt
+   
+## 🏗 Pipeline Architecture
 
-   graph TD
+The data flow follows the **Medallion Architecture** standard (Bronze, Silver, Gold), ensuring governance and quality at every stage.
+```mermaid
+
+graph TD
     A[Source: Kaggle CSV] -->|Ingestion| B(Bronze: Raw Data)
     B -->|Data Cleaning via Pandas| C(Silver: Clean Data)
     C -->|Aggregation via DuckDB| D(Gold: Business KPIs)
