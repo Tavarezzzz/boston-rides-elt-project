@@ -1,5 +1,13 @@
+# --- Pipeline ELT ---
 pandas
 duckdb
 pyarrow
 apache-airflow
 
+# --- Agente Text-to-SQL (C.F.C.) ---
+langchain
+langchain-community
+langchain-groq
+duckdb-engine
+sqlalchemy<2.0
+python-dotenv
